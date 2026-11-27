@@ -1,0 +1,48 @@
+\section{Conclusions}\label{sec:conclusion}
+
+\subsection{Answers to the four questions}
+
+\textbf{What distinguishes the three call types?} They differ along the frequency axis, not in
+duration or bandwidth. Peak frequency separates the groups after correction ($H=12.28$,
+$p=0.013$), and the median first fundamental decreases from flat (298 Hz) through modulated
+(287 Hz) to two-voice (274.5 Hz). The two-voice call additionally carries a second fundamental,
+which is a structural feature rather than a continuous measurement. A classifier using only the
+shared continuous features reaches a macro-$F_1$ of 0.458; admitting the structural indicators
+raises it to 0.952, but that gain reflects the definition of the call types, not a better
+acoustic description.
+
+\textbf{How far does the signal travel?} Fidelity is nearly constant to 32 m and collapses
+between 64 and 256 m. At the operational threshold $\tau=0.5$ the effective ranges are 84.7 m
+(flat), 144.6 m (modulated) and 169.7 m (two-voice). The ordering is robust across thresholds and
+across most weightings, but not under an envelope-heavy weighting --- at $\tau=0.7$ with weight
+0.5 on the envelope correlation the two-voice radius collapses to 12.1 m --- nor across model
+families: at $\tau=0.5$ a four-parameter Weibull reverses the modulated and two-voice order. The
+three correlations are not independent evidence; the spectrogram and amplitude-spectrum metrics
+are strongly correlated (per-type $r=0.81$--$0.97$).
+
+\textbf{Do penguins respond, and to what?} Yes, strongly, and the paired design is what makes
+this visible: 64.8\% against 12.9\%, McNemar OR 37.0 (95\% CI 9.9--311). Response declines with
+distance (OR 0.49 per $e$-fold) and with group size (OR 0.94 per bird), and the three call types
+differ from control (OR 13.7--22.4) but not clearly from one another. The distribution of the
+eight response combinations changes under playback ($p=0.0002$); whether call type shifts the
+probability of a specific combination is not established ($p=0.137$, 58\% of expected counts
+below five). Time to first response has a conditional median of about 2 s and lengthens by a
+factor of 1.27 per $e$-fold of distance.
+
+\textbf{What is the communication-effective range?} With
+$\mathrm{CEI}(d)=F(d)\times P_{\mathrm{recruit}}(d)$, the behaviour-limited half-effectiveness
+radii are 137 m (flat), 175 m (modulated) and 203 m (two-voice) on the empirical curve, with the
+two-voice value falling to 158 m under a logistic fit. Recruitment probability itself declines
+only weakly with distance (OR 0.87 per $e$-fold, $p=0.59$), so the radius is driven mainly by
+fidelity rather than by a behavioural gradient. If a 3 dB increase were equivalent to the assumed
+0.10 drop in fidelity, the radii would fall to 102, 141 and 171 m. We translate these into a
+precautionary 200 m buffer with a 3 dB limit in the 0.5--2 kHz band.
+
+\subsection{Future work}
+
+Three extensions would materially improve the conclusions. First, recording the observation
+window explicitly would turn $W=60$ s from an assumption into a measurement. Second, marking
+individual birds would make $\rho$ identifiable and would separate group-level from
+individual-level response. Third, an experiment that links a playback trial to a propagation
+measurement of the same call would make the perception term $q(d)$ estimable rather than
+imported, and would close the largest gap in the present analysis.

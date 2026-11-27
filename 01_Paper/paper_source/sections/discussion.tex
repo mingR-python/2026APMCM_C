@@ -1,0 +1,82 @@
+\section{Uncertainty, robustness and limitations}\label{sec:discussion}
+
+\subsection{Four layers of uncertainty}
+
+The intervals reported in Sections~\ref{sec:q3} and~\ref{sec:q4} are the narrowest of the four
+layers of uncertainty that the analysis contains. Reporting them alone would give a false sense
+of precision.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Four layers of uncertainty, their typical magnitude, and how they were handled.}\label{tab:uncertainty}
+  \small
+  \begin{tabular}{p{2.6cm}p{4.6cm}p{5.6cm}}
+    \toprule
+    Layer & Magnitude & Treatment \\
+    \midrule
+    Sampling (blocks) & two-voice radius $\pm 5$ m by block bootstrap & block bootstrap over 30 blocks, not rows \\
+    Model family & two-voice radius 158--203 m (logistic vs empirical) & report the range, do not choose \\
+    Threshold and weights & radius 203 $\to$ 143 m when $\tau$ moves 0.5 $\to$ 0.7; 12--67 m under envelope weight 0.5 & full sensitivity table, Section~\ref{sec:q4-sens} \\
+    Definition of outcomes & any response (all 278 rows) 108 $\to$ 112 across S1--S3 & definitional sensitivity, Table~\ref{tab:defsens} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The ordering is instructive: the sampling layer, the only one that conventional statistics
+reports, is smaller than the others by an order of magnitude. A paper that reported
+$203.4\pm5$ m and stopped would be technically correct and practically misleading.
+
+\subsection{What would change the conclusions}
+
+Three statements survive every sensitivity analysis and three do not.
+
+\emph{Robust.} (i) Natural calls elicit far more responses than controls, by a factor between 13
+and 37 depending on the matching used. (ii) Response probability declines with distance and with
+group size. (iii) The distribution of response combinations differs between call and control.
+
+\emph{Fragile.} (i) The ordering of call types at the 0.5 threshold is model-dependent: a
+four-parameter Weibull places modulated marginally ahead of two-voice, while the empirical curve,
+the GAM and the three-parameter Weibull place two-voice ahead. (ii) The claim that two-voice
+calls are most robust at long range holds for the spectrogram and amplitude-spectrum metrics and
+reverses for the envelope metric at 256 m. (iii) The apparent effect of context disappears after
+adjustment for group size, and the data cannot say whether the remaining association with group
+size is behavioural or observational.
+
+\subsection{Limitations}
+
+\textbf{The observation window is not recorded (L1).} We assume $W=60$ s because it is the upper
+bound of the duration field and exceeds the largest observed latency; the sensitivity over 48,
+90 and 120 s bounds the effect, and if the true window were shorter some non-responders would be
+misclassified. \textbf{Nine zero latencies are excluded from the latency model (L2)}; they are
+immediate responses at the resolution of the protocol and would form a point mass that a
+continuous likelihood cannot accommodate. \textbf{Playback and propagation trials cannot be
+linked (L3)}, because no recording identifier connects them, so $q(d)$ in
+Equation~\eqref{eq:decomp} must be imported rather than estimated. \textbf{Date is confounded
+with call type (L4)}: the association is strong (Cram\'er's $V=0.528$), and a date-fixed-effects
+fit raises the modulated and two-voice odds ratios to about 46 and 39; although the intervals
+widen (13--163 and 13--116), both remain significant, so the association survives the date
+confound. The estimates are imprecise because date and call type are strongly associated. We keep
+the unadjusted model as primary and report the adjusted direction as a caveat. \textbf{The propagation data have a small effective sample (L5)}: thirty
+blocks support about 46 effective observations per distance, which the block bootstrap reflects
+but cannot enlarge. Finally, \textbf{all conclusions are conditional on a single site and a
+single season (L6)} and should not be extrapolated without re-estimation.
+\textbf{Recruitment is extrapolated beyond the playback range (L7)}: playback distances stop at
+200 m, whereas the CEI curve is evaluated to 256 m, so the two-voice radius of 203 m sits at the
+edge of the observed range and should be read as an upper bound of about 200 m. \textbf{The CEI
+bands reflect fidelity sampling only (L8)}: the block bootstrap resamples the 30 propagation
+blocks but does not propagate the uncertainty in the GEE coefficients for $P_{\mathrm{recruit}}$,
+so the bands in Figure~\ref{fig:q4-cei} understate the total uncertainty.
+
+\subsection{Strengths and weaknesses of the model}
+
+The strength of the approach is that it uses the design the data actually have: the pairing is
+exploited rather than discarded, censoring is modelled rather than deleted, the block structure
+of the propagation data is respected in the CEI intervals of Section~\ref{sec:q4}, and the index
+is built from two separately estimated components whose provenance is traceable.
+
+The weakness is that the two components are measured on different scales. Fidelity is a
+correlation between waveforms, recruitment is a probability of behaviour, and their product is
+dimensionless but not calibrated to any ecological outcome. The index orders distances and call
+types correctly; it does not tell us how many calories a bird saves, or how many recruits a
+colony needs. Closing that gap would require a fitness-linked experiment that the present data
+cannot supply.

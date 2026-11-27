@@ -1,0 +1,5 @@
+﻿情景,鸣叫事件,总响应,对照响应,说明
+S0,81,108,18,原始定义：VocalYesNo=(VocalNcalls>VocalNcallsBefore)
+S1,85,111,20,鸣叫改为任何播放后叫声 (VocalNcalls>0)
+S2,81,109,18,接近改为接近尝试 (ApproachLatency 非空)
+S3,85,112,20,S1+S2

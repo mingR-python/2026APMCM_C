@@ -1,0 +1,115 @@
+\subsection*{A.1 Reproduction}
+
+All results are deterministic given the seeds. The pipeline has three scripts.
+
+\begin{enumerate}[leftmargin=1.8em,itemsep=2pt]
+  \item \texttt{q1\_q2.py} --- descriptive statistics, Kruskal--Wallis and Mann--Whitney tests
+        with Holm correction, repeated stratified five-fold cross-validation, date-holdout
+        validation, composite fidelity, monotone fitting, bootstrap intervals and the Weibull
+        comparisons of Problem~2. Seed 2026.
+  \item \texttt{generate.py} --- paired McNemar tests, GEE models, the eight-combination
+        permutation test, the two-part AFT model, the nine-row prediction table, CEI curves and
+        radii, expected responders and the scenario analysis. Block bootstrap: 2000 resamples of
+        the 30 blocks; combination permutation: 5000 swaps.
+  \item \texttt{make\_figs.py} --- the eight figures.
+\end{enumerate}
+
+Environment: Python 3.14 with numpy 2.5, pandas 3.0, matplotlib 3.11 and statsmodels for the GEE
+and AFT fits; XeLaTeX for typesetting. Total runtime under five minutes.
+
+\subsection*{A.2 Data and code availability}
+
+The data are those distributed with the 2026 APMCM Problem C and archived by the problem setters
+in the public Zenodo record cited in the problem statement (Data01--11 and Supplementary~1--5).
+No external data were used. The three scripts above read only the nine correlation files, Data01
+and Data02 from the supplied archive; they, together with the intermediate result tables, are
+provided as supplementary material, so every number in this paper can be regenerated exactly.
+
+
+\subsection*{A.3 Date-adjusted sensitivity for the call-type effect}
+
+Date is strongly associated with call type (Cram\'er's $V=0.528$), so the call-type odds ratios
+could in principle be an artefact of when each call type was played. Table~\ref{tab:date-adj}
+refits the model of Equation~\eqref{eq:gee} with a fixed effect for each recording date
+(12 levels, 19 parameters, 139 clusters).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Call-type odds ratios before and after adjusting for recording date.}\label{tab:date-adj}
+  \small
+  \begin{tabular}{lrrrr}
+    \toprule
+    & \multicolumn{2}{c}{Unadjusted} & \multicolumn{2}{c}{Date-adjusted} \\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+    Call type & OR [95\% CI] & $p$ & OR [95\% CI] & $p$ \\
+    \midrule
+    flat & 13.75 [6.58, 28.73] & $<0.001$ & 15.79 [6.44, 38.73] & $<0.001$ \\
+    mod & 16.28 [6.39, 41.47] & $<0.001$ & 45.98 [13.13, 161.07] & $<0.001$ \\
+    tv & 22.38 [9.47, 52.89] & $<0.001$ & 38.73 [12.90, 116.26] & $<0.001$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Adjustment increases the modulated and two-voice odds ratios by a factor of two to three and
+widens their intervals substantially, but every effect remains significant. The date-confound
+therefore inflates our uncertainty rather than explaining the effect away.
+
+\subsection*{A.4 The recruitment model behind the index}
+
+The index of Equation~\eqref{eq:cei} uses a second response definition, recruitment
+(approach or vocalisation), fitted with the same estimating equations. Table~\ref{tab:gee-recruit}
+reports it. Its most important entry is the distance term.
+
+\begin{table}[htbp]
+  \centering
+  \caption{GEE for recruitment (approach or vocalisation). n = 278, 139 clusters.}\label{tab:gee-recruit}
+  \small
+  \begin{tabular}{lrrr}
+    \toprule
+    Term & OR & 95\% CI & $p$ \\
+    \midrule
+    flat vs control & 54.66 & 16.32--183.07 & $<0.001$ \\
+    mod vs control & 42.59 & 13.08--138.63 & $<0.001$ \\
+    tv vs control & 68.04 & 20.46--226.23 & $<0.001$ \\
+    $\log$ distance (per $e$-fold) & 0.873 & 0.529--1.439 & 0.593 \\
+    Group size (per bird) & 0.944 & 0.898--0.992 & 0.023 \\
+    Context: commuting vs after & 0.794 & 0.340--1.857 & 0.595 \\
+    Context: searching vs after & 2.677 & 0.891--8.044 & 0.079 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Recruitment declines only weakly with distance and not significantly ($p=0.59$), whereas the
+any-response outcome of Table~\ref{tab:q3-gee} declines clearly ($p=0.008$). The difference is
+informative: distance mainly suppresses the cheap responses (heads-up, vocalisation) rather than
+the decision to approach. It also means that the distance profile of the index is driven by
+fidelity rather than by behaviour.
+
+\subsection*{A.5 Software and source code}
+
+Software: Python 3.14 with numpy 2.5, pandas 3.0, matplotlib 3.11 and statsmodels 0.15;
+XeLaTeX for typesetting.
+
+The complete source code is provided in the supplementary archive submitted with this paper
+(\texttt{Capmcm26XXXXXXfj.zip}), as required by the submission specification. It consists of
+three files, listed here with their size and the results they produce.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Source files in the supplementary archive.}\label{tab:code}
+  \small
+  \begin{tabular}{llrl}
+    \toprule
+    File & Produces & Lines & Random seed \\
+    \midrule
+    \texttt{q1\_q2.py} & Problem 1 and Problem 2 results, Figures 1--2 & 473 & 2026 \\
+    \texttt{generate.py} & Problem 3 and Problem 4 results, Tables 8--22 & 391 & fixed \\
+    \texttt{make\_figs.py} & Figures 1--8 & 232 & fixed \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The scripts read only the data files distributed with the problem and write plain CSV tables, so
+every number in this paper can be regenerated without any private dependency. The code is not
+reproduced in the appendix because its string literals contain the Chinese names of the output
+tables, which would violate the English-only requirement for the paper.

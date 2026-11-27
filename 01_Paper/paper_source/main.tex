@@ -1,0 +1,116 @@
+% !Mode:: "TeX:UTF-8"
+% 2026 APMCM Problem C -- full paper
+% Compile with: xelatex main.tex  (run twice for the table of contents)
+\documentclass{apmcmthesis}
+\renewcommand*{\baselinestretch}{1.15}
+\geometry{top=24mm,bottom=24mm,left=25mm,right=25mm}
+
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+\graphicspath{{./}}
+\setlength{\emergencystretch}{1.5em}
+
+\titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection.}{.5em}{}
+
+%%%%%%%%%%%% 相关信息 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\tihao{C}
+\baominghao{apmcm263XXXXX}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{document}
+\pagestyle{frontmatterstyle}
+
+\begin{abstract}
+African penguins (\textit{Spheniscus demersus}) are critically endangered and depend on
+acoustic contact at sea to maintain group cohesion and to recruit conspecifics to foraging
+aggregations. We integrate three datasets supplied with the problem --- acoustic measurements
+of 108 sea-surface calls (44 flat, 40 modulated, 24 two-voice), 278 playback trials organised
+as 139 paired call--control experiments, and propagation correlations at seven distances from
+4 to 256 m --- into a single chain that runs from signal structure to conservation advice.
+
+For the acoustic question we show that the three call types differ mainly along the frequency
+axis: peak frequency separates the groups after Holm correction ($H=12.28$, $p=0.013$), whereas
+duration, Q25 and Q75 do not. A classifier restricted to the six shared acoustic features
+reaches only a macro-$F_1$ of 0.458, and 0.952 when the structural indicators (presence of a
+second fundamental, presence of a pulse rate) are admitted; the difference is label leakage,
+not acoustic information.
+
+For the propagation question we fuse spectrogram, amplitude-spectrum and envelope correlations
+into a composite fidelity $F(d)$. Fidelity is nearly flat to 32 m and collapses between 64 and
+256 m. At the operational threshold $\tau=0.5$ the effective ranges are 84.7 m (flat),
+144.6 m (modulated) and 169.7 m (two-voice) under an equal-weight scheme, but the ranking is
+model-dependent: a four-parameter Weibull reverses the modulated/two-voice order.
+
+For the behavioural question we exploit the paired design. Natural calls raise the response
+rate from 12.9\% to 64.8\% (McNemar OR $=37.0$, 95\% CI 9.9--311). In a GEE with experiment-level
+clustering, call type (OR 13.7--22.4 versus control), distance (OR 0.49 per $e$-fold, $p=0.008$)
+and group size (OR 0.94 per bird, $p=0.0045$) are associated with response; context is not after
+adjustment. The distribution of the eight response combinations changes under playback
+(paired permutation $p=0.0002$), and time to first response has a median of about 2 s with a
+distance multiplier of 1.27 per $e$-fold.
+
+For the conservation question we define the Communication Effectiveness Index
+$\mathrm{CEI}(d)=F(d)\times P_{\mathrm{recruit}}(d)$, a product of two necessary conditions rather
+than a compensable weighted sum. Its half-effectiveness radii are 137 m (flat), 175 m (modulated)
+and 203 m (two-voice) empirically, with the two-voice value falling to 158 m under a logistic fit.
+Recruitment probability declines only weakly with distance (OR 0.87 per $e$-fold, $p=0.59$), so
+the radius is driven by fidelity; a 3 dB-equivalent fidelity loss would reduce the radii to
+102--171 m. We translate the index into a
+precautionary 200 m noise-management buffer with a 3 dB limit in the 0.5--2 kHz band, and we state
+explicitly what the data cannot support: no response is not the same as no perception, and the
+absence of a call-type effect on specific combinations is a power limitation, not evidence of
+equivalence.
+
+\keywords{acoustic communication \quad paired playback design \quad censored latency \quad composite fidelity \quad communication effectiveness index}
+\end{abstract}
+
+\newpage
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+\newpage
+\pagestyle{mainmatterstyle}
+\setcounter{page}{1}
+
+\input{sections/intro}
+\input{sections/data}
+\input{sections/q1}
+\input{sections/q2}
+\input{sections/q3}
+\input{sections/q4}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\footnotesize
+\begin{thebibliography}{9}
+\bibitem{ref1} Pichegru, L., et al. (2012). Behavioural inertia places a top marine predator at
+risk from environmental change. \textit{Marine Biology}, 159: 1191--1200.
+\bibitem{ref2} Favaro, L., et al. (2016). Vocal individuality cues in the African penguin
+(\textit{Spheniscus demersus}). \textit{Bioacoustics}, 25(2): 155--171.
+\bibitem{ref3} Thiebault, A., et al. (2019). Seabird acoustic communication at sea: a new
+perspective using bio-logging. \textit{Scientific Reports}, 9: 12445.
+\bibitem{ref4} Liang, K.-Y., Zeger, S. L. (1986). Longitudinal data analysis using generalized
+linear models. \textit{Biometrika}, 73(1): 13--22.
+\bibitem{ref5} McNemar, Q. (1947). Note on the sampling error of the difference between
+correlated proportions or percentages. \textit{Psychometrika}, 12(2): 153--157.
+\bibitem{ref6} Stuart, A. (1955). A test for homogeneity of the marginal distributions in a two-way
+classification. \textit{Biometrika}, 42(3/4): 412--416.
+\bibitem{ref7} Efron, B., Tibshirani, R. (1994). \textit{An Introduction to the Bootstrap}.
+Chapman \& Hall/CRC.
+\bibitem{ref8} Royston, P., Parmar, M. K. B. (2013). Restricted mean survival time: an
+alternative to the hazard ratio. \textit{BMC Medical Research Methodology}, 13: 152.
+\end{thebibliography}
+
+\newpage
+\appendix
+\section{Reproducibility and data availability}
+\input{sections/appendix}
+
+\end{document}

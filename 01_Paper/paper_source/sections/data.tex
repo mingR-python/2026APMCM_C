@@ -1,0 +1,127 @@
+\section{Data, design and notation}\label{sec:data}
+
+\subsection{Three datasets}
+
+The problem supplies three kinds of evidence, summarised in Table~\ref{tab:data}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Datasets used in this paper.}\label{tab:data}
+  \small
+  \begin{tabular}{llll}
+    \toprule
+    Source & Content & Shape & Used in \\
+    \midrule
+    Data01 & acoustic measurements of sea-surface calls & 108 calls $\times$ 11 fields & Problem 1 \\
+    Data02 & playback trials, paired call/control & 278 rows = 139 pairs $\times$ 40 fields & Problem 3, 4 \\
+    Data03--11 & propagation correlations at 7 distances & 9 files $\times$ 300 rows $\times$ 7 distances & Problem 2, 4 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The acoustic file contains 44 flat, 40 modulated and 24 two-voice calls. Two fields are
+\emph{structurally} missing rather than lost: the second fundamental $F_{02}$ exists only for
+two-voice calls (24/24 present, 0/84 elsewhere), and the pulse rate is present for modulated
+(34/40) and two-voice (20/24) calls but never for flat calls (0/44). This structure is a
+property of the call types, and treating it as an ordinary covariate would leak the label into
+the classifier; Section~\ref{sec:q1} quantifies that leakage.
+
+\subsection{The paired playback design}\label{sec:paired}
+
+Each of the 139 experiments (\texttt{expID}) contains exactly two rows: one natural call and one
+control, played on the same date and in the same behavioural context. This is a matched-pair
+design, and it is the single most important structural fact in the dataset. Three consequences
+follow.
+
+First, the comparison of interest is within-pair. A test that pools the 139 call rows and the
+139 control rows discards the matching and attenuates the effect: the pooled odds ratio is 12.4,
+whereas the paired McNemar odds ratio is 37.0 (Section~\ref{sec:q3-overall}).
+
+Second, matching is complete at the level of date and context but not at the level of distance.
+All 139 pairs share a date and a context; only 49 pairs share a distance, and the remaining 90
+differ by between $-150$ and $+120$ m. Pairing is therefore a group-level device, not a
+distance-matched one. We use the pair as the clustering unit (generalised estimating equations
+with an exchangeable working correlation) and report an equal-distance subset as a sensitivity
+analysis rather than as the primary estimate.
+
+Third, the 139 call trials reuse 28 distinct playback tracks (plus one pseudo-track for the
+control), with a mean of 4.96 trials per track. Trials are therefore not independent at the level
+of the stimulus either. The track-level intraclass correlation of response is 0.079, which is
+small but non-zero; we treat it as a sensitivity dimension rather than as a second random effect
+in the primary model, because the number of tracks per call type is small (11, 7 and 10).
+
+\subsection{Derived outcomes and definitional sensitivity}\label{sec:derived}
+
+The response indicators in Data02 are derived quantities, not independent observations. The
+identities hold for all 278 rows without exception:
+\begin{align}
+  \text{HeadsUpYesNo} &= \mathbf{1}\{\text{HeadsUpDuration}>0\}, \\
+  \text{ApproachYesNo} &= \mathbf{1}\{\text{ApproachDuration}>0\}, \\
+  \text{VocalYesNo} &= \mathbf{1}\{\text{VocalNcalls}>\text{VocalNcallsBefore}\}, \\
+  \text{ResponseYesNo} &= \text{HeadsUp} \lor \text{Vocal} \lor \text{Approach}.
+\end{align}
+
+The third identity deserves emphasis. \texttt{VocalYesNo} measures a \emph{net increase} over the
+pre-playback baseline, not the occurrence of any vocalisation. Four rows therefore have
+\texttt{VocalYesNo}$=0$ while \texttt{VocalNcalls}$>0$: the bird vocalised after playback, but
+less than it had before. These rows are not data errors, and we do not delete them. To show that
+the conclusions do not depend on this convention, we recompute the response counts under three
+alternative definitions (Table~\ref{tab:defsens}).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Definitional sensitivity of the response counts (all 278 rows, calls and controls
+  combined). S0 is the primary definition.}\label{tab:defsens}
+  \small
+  \begin{tabular}{llrrr}
+    \toprule
+    Scenario & Definition & Vocal events & Any response (278 rows) & of which control \\
+    \midrule
+    S0 & net increase (primary) & 81 & 108 & 18 \\
+    S1 & any post-playback vocalisation & 85 & 111 & 20 \\
+    S2 & approach attempt (latency recorded) & 81 & 109 & 18 \\
+    S3 & S1 and S2 combined & 85 & 112 & 20 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Across the three alternatives the total number of any-response trials (calls and controls
+combined) moves between 108 and 112, of which 18--20 are controls, so the qualitative conclusions
+of Section~\ref{sec:q3} are not an artefact of the definition.
+
+\subsection{The nested structure of the propagation data}
+
+Each of the nine propagation files contains 300 rows and seven columns, one per distance. The
+rows are not 300 independent trials. They form 30 contiguous blocks of ten rows, and each block
+corresponds to one call-level unit measured at all seven distances. A block indicator alone
+explains 55.7\% (two-voice), 72.2\% (flat) and 80.2\% (modulated) of the row-level variance in
+fidelity; the median design effect is 6.46, which corresponds to an effective sample size of
+about 46 per distance rather than 300. Any interval computed by resampling rows independently is
+too narrow by a factor of about 2.5. All uncertainty statements about the CEI radii in
+Section~\ref{sec:q4} therefore use a \emph{block} bootstrap that resamples the 30 blocks, not
+the rows \cite{ref7}. The Q2 threshold radii in Table~\ref{tab:q2-ranges} use a record-level bootstrap and
+should be read as lower bounds; the model-family range is the honest summary.
+
+Within a call type, the missing-value pattern is identical across the three metrics, which
+confirms that the three columns describe the same trials and can be averaged row-wise. Across
+call types the rows cannot be matched, because no trial identifier is shared; we never assume that
+row $i$ of the flat file and row $i$ of the modulated file are the same event.
+
+\subsection{Assumptions}
+
+Four assumptions carry the analysis, and each is stated with the evidence that supports it.
+
+\begin{description}[leftmargin=1.2em,itemsep=2pt]
+  \item[A1] \textbf{The three correlations measure one latent fidelity.} Supported by the strong
+  correlation between the spectrogram and amplitude-spectrum metrics ($r=0.81$--$0.97$ per call
+  type). We nevertheless treat the equal weighting as a choice, not a fact, and vary it in
+  Section~\ref{sec:q4-sens}.
+  \item[A2] \textbf{The playback pair is exchangeable within an experiment.} Justified by design
+  (same date, context and, in 49 pairs, same distance); relaxed by the equal-distance subset.
+  \item[A3] \textbf{Censoring is non-informative at $W=60$ s.} The observation window is not
+  recorded in the data; 60 s is the upper bound of the duration field and exceeds the largest
+  observed latency (47.8 s). We vary $W$ over 48, 90 and 120 s.
+  \item[A4] \textbf{Fidelity and recruitment are multiplicatively separable.} This is a modelling
+  choice with an ecological justification (two necessary conditions), not a testable law; we say
+  so explicitly in Section~\ref{sec:q4}.
+\end{description}
